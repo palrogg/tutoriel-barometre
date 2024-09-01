@@ -85,5 +85,6 @@ void loop() {
   }
 
   // AJOUT: on entre en sommeil profond
+  delay(2000); // Un petit delai pour se laisser le temps de flasher la carte
   taskManager.EnterSleep(DEFAULT_SLEEPING_TIME);
 }
