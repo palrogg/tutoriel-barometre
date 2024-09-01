@@ -9,6 +9,6 @@ $ts = date('c');
 if (!$fp) {
     die('Could not open file!');
 }
-$fields = [$today, $ts, $temperature, $humidity];
+$fields = [$ts, $temperature, $humidity];
 fputcsv($fp, $fields);
 fclose($fp);
