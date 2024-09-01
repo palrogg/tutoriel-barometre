@@ -60,6 +60,7 @@ void loop() {
     String humidity = String(bme280.getHumidity());
 
     // On envoie une requete au serveur
+    // AJOUT: on transmet le voltage
     String path = "/simple-put.php?temperature=" + temperature +
                   "&humidity=" + humidity + "&battery_level=" + batteryLevelStr;
     String url = serverName + path;
