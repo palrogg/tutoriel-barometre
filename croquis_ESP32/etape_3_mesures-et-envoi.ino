@@ -67,9 +67,12 @@ void setup() {
 
   // On envoie les donnees au serveur
   client.setInsecure();  // pas de verification du certificat
-
+  
+  // Si vous utilisez une batterie externe, que vous souhaitez suivre votre voltage
+  // et envoyer une alerte quand il tombe trop bas, vous pouvez utiliser
+  // le parametre battery_level. Voir la version ESP8266 pour un exemple.
   String path = "/put.php?temperature=" + String(temperature) +
-                "&humidity=" + String(humidity) + "&battery_level=0";
+                "&humidity=" + String(humidity) + "&battery_level=9999";
   String url = "https://" + String(host) + path;
   HTTPClient http;
 
