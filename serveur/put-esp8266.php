@@ -4,9 +4,6 @@ require("config.php");
 
 $temperature = filter_var($_GET['temperature'], FILTER_VALIDATE_FLOAT);
 $humidity = filter_var($_GET['humidity'], FILTER_VALIDATE_FLOAT);
-
-// Le champ battery_level est utile pour mon circuit d'origine avec l'esp8266.
-// Vous pouvez le retirer et adapter le code (dans ce cas, pensez a modifier aussi index.php)
 $battery_level = filter_var($_GET['battery_level'], FILTER_VALIDATE_INT);
 
 date_default_timezone_set('Europe/Zurich');
@@ -22,7 +19,24 @@ $fields = [$today, $ts, $temperature, $humidity, $battery_level];
 fputcsv($fp, $fields);
 fclose($fp);
 
-// Refresh DataWrapper chart
+// Pour la version ESP8266:
+// Envoi d’une alerte Slack si le voltage est inferieur a 2800
+if ($battery_level < 2800) {
+    $url = $slack_hook;
+    $data = array("text" => "Je manque d’énergie! <@UDRJPDP5E>");
+
+    $postdata = json_encode($data);
+
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $postdata);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+    $result = curl_exec($ch);
+    curl_close($ch);
+}
+
+// On rafraichit les graphiques DataWrapper
 $header = array(
     'Accept: */*',
     'Authorization: Bearer ' . $dw_key
